@@ -13,3 +13,8 @@ deactave
 #install poetry
 pip install poetry
 pip install -r .\source\requirements.txt
+
+#docker
+docker-compose up
+docker-compose -f docker-redis.yml up --detach
+docker-compose -f docker-postgres.yml up --detach
