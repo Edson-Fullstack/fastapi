@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<body >
+<head>
+    <meta charset="utf-8">
+    <link id="favicon" rel="shortcut icon" type="image/png" href="/static/images/perfil.png"/>
+<title>Edson's Resume</title>
+[% include '/includes/_header.html' %]
+</head>
+[% if debug=="true"%]
+        <p>[[debug]]</p>
+        <p>[[data]]</p>
+    [% endif %]
+<div id="app" v-if="data"  >
+    <v-flex class="page">
+        <div  onclick=window.print();>
+        <v-row class="my-12">
+            <v-col cols="3">
+            <v-avatar size="160" >
+                <img alt="perfil" src="/static/images/perfil.png">
+            </v-avatar>
+            </v-col>
+
+            <v-col cols="9" >
+            <div id="header">
+                <h1 style="color:white;font-family: 'Roboto', sans-serif;"><strong>Edson Coelho dos Santos</strong></h1>
+                <v-divider color="white"></v-divider>
+                <h3 style="color:white;font-family: 'Roboto', sans-serif;">Developer</h3>
+                <br />
+            <h5 style="color:white;font-family: 'Times New Roman', Times, serif;">Bachelor of Computer Science at Federal University of São João del Rei, enthusiastic in the use of new technologies and methodologies.{{ data[1]}}</h5>
+            </div>
+        </v-col>
+        </v-row>
+        <v-row class="my-12">
+            <v-col cols="3" >
+                <div>
+            <v-icon small color=#1dbfaf>fa-envelope</v-icon>
+                <p class="roboto"><a onclick="window.open('mailto:edson.coder@gmail.com');event.stopPropagation();">edson.coder@gmail.com</a></p>
+            <v-icon medium color=#1dbfaf>fa-mobile</v-icon>
+                <p class="roboto">+55 (32)99808-7750</p>
+            <v-icon medium color=#1dbfaf>fa-map-marker</v-icon>
+                    <p class="roboto"><a  onclick="window.open('https://www.google.com/maps/place/S%C3%A3o+Jo%C3%A3o+Del+Rei,+S%C3%A3o+Jo%C3%A3o+del+Rei+-+State+of+Minas+Gerais');event.stopPropagation();">Minas Gerais, São João del Rei, Brazil</a></p>
+            <v-icon small color=#1dbfaf>fa-linkedin</v-icon>
+                <p style="font-family: 'Roboto'">edson.coder@gmail.com</p>
+                    </div>
+                <div>
+                    <label>Frontend:</label>
+                    <v-progress-circular color=#1dbfaf :rotate="270" :size="50" :width="6" :value=90 >
+                        <span>90</span>
+                    </v-progress-circular>
+                    <label>Backend:</label>
+                    <v-progress-linear color=#1dbfaf height="20" value="90">
+                        <span class="roboto white">90</span>
+                    </v-progress-linear>
+                </div>
+            </v-col>
+
+        <v-col cols="9">
+                <v-col cols="6">
+                <div >
+                    <v-progress-linear color=#1dbfaf height="20" value="90">
+                        <span class="roboto white">Frontend</span>
+                    </v-progress-linear>
+                    <v-progress-linear color=#1dbfaf height="20" value="80">
+                        <span class="roboto white">Backend</span>
+                    </v-progress-linear>
+                    <v-progress-linear color=#1dbfaf height="20" value="70">
+                        <span class="roboto white">70</span>
+                    </v-progress-linear>
+                    <v-progress-linear color=#1dbfaf height="20" value="60">
+                        <span class="roboto white">60</span>
+                    </v-progress-linear>
+                    <v-progress-linear color=#1dbfaf height="20" value="50">
+                        <span class="roboto white">50</span>
+                    </v-progress-linear>
+                    <v-progress-linear color=#1dbfaf height="20" value="40">
+                        <span class="roboto white">40</span>
+                    </v-progress-linear>
+                    <v-progress-linear color=#1dbfaf height="20" value="40">
+                        <span class="roboto white">40</span>
+                    </v-progress-linear>
+                    <v-progress-linear color=#1dbfaf height="20" value="40">
+                        <span class="roboto white">40</span>
+                    </v-progress-linear>
+
+                </div>
+                    </v-col>
+
+            </v-row>
+                <div>
+                <h1>Title</h1>
+                    <h3>Places</h3>
+                        <h5>explain</h5>
+                </div>
+            </v-col>
+        </v-row>
+            </div>
+    </v-flex>
+  </div>
+
+
+</body>
+[% include '/includes/_footer.html' %]
+<script>
+    const store = new Vuex.Store({
+      state: {
+        data: []
+      },
+        actions:{
+          load({commit}){
+              i=0;
+              [[data_link | tojson]].forEach(link =>{
+                            axios.get(link)
+                            .then(response => {
+                                console.log(response.data);
+                                let data= response.data;
+                                commit('SET_DATA',data);
+                                i++;
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                console.log(error.response)
+                                this.errored = true
+                            })
+                    })
+              }
+          },
+      mutations: {
+        SET_DATA(state,data){
+            state.data.push(data);
+        }
+    }
+  });
+    let app =new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        store,
+        async beforeCreate(){
+            await store.dispatch('load')
+        },
+            computed: Vuex.mapState(['data'])
+        }
+    )
+
+
+  </script>
+<style >
+body {
+    background: rgb(204,204,204);
+}
+.roboto {
+    {#font-family: 'Roboto Medium','Roboto', Times New Roman,sans-serif;#}
+}
+.white{
+    color:white;
+}
+.page {
+    width: 21cm;
+    min-height: 29.6cm;
+    padding: 0.5cm;
+    border: 1px #D3D3D3 solid;
+    background: white;
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+}
+
+#header {
+    box-sizing: content-box;
+    background: #1dbfaf;
+    width: 519px;
+    height: 100px;
+    padding: 30px;
+}
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    div {
+        border: 1px solid rgba(0,0,0,0)
+  }
+    .page {
+        margin: 0;
+        width: initial;
+        border: initial;
+        -webkit-print-color-adjust: exact;
+    }
+}
+</style>
+</html>
+
+

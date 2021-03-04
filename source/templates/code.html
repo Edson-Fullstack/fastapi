@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>Home Page</title>
+</head>
+
+<body>
+{% include '/includes/_header.html' %}
+{% autoescape false %}
+<strong>{{text}}</strong>
+{% endautoescape %}
+{% include '/includes/_footer.html' %}
+</body>
+
+</html>

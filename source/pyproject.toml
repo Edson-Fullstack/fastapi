@@ -1,0 +1,40 @@
+[tool.poetry]
+env = "local" # local-dev-hom-prd
+version = "0.0.2"
+name = "SAFE"
+description = "Sistema de Auxilio Funcional e Estrutural"
+license = "MIT"
+authors = ["edson.fullstack@gmail.com"]
+readme = "README.md"
+repository = ""
+homepage = ""
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+fastapi = "*"
+toml = "*"
+dataset = "*"
+stuf ="*"
+aiofiles = "*"
+psycopg2-binary = "*"
+jinja2 = "*"
+mysqlclient = "*"
+wheel = "*"
+pymysql = "*"
+dotenv = "*"
+fastapi-cache2 = "*"
+aioredis = "*"
+venv = "*"
+
+[tool.poetry.dev-dependencies]
+#pytest = "^3.10.1"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+expt  = 'poetry run pip freeze > ./requirements.txt'
+expt2 = "poetry export -f requirements.txt > ./requirements.txt"
+d = "docker build -t flask  ."
+e3 = "flask run"

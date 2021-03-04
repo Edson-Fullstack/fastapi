@@ -1,0 +1,15 @@
+install python
+install pip
+
+#venv
+python -m venv venv
+#active on linux and macos
+source env/bin/activate
+#active on windows
+.\venv\Scripts\activate.bat
+#deactive windows
+deactave
+
+#install poetry
+pip install poetry
+pip install -r .\source\requirements.txt

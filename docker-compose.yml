@@ -1,0 +1,13 @@
+version: '3.5'
+services: 
+    server:
+        build: source
+        container_name: "api"
+        volumes:
+            - type: bind
+              source: ./source
+              target: /source
+              read_only: true
+        ports:
+            - "8080:8080"
+        network_mode: host
