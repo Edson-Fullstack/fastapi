@@ -1,5 +1,4 @@
 [tool.poetry]
-env = "local" # local-dev-hom-prd
 version = "0.0.2"
 name = "SAFE"
 description = "Sistema de Auxilio Funcional e Estrutural"
@@ -10,7 +9,7 @@ repository = ""
 homepage = ""
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = ">=3.7,<4.0"
 fastapi = "*"
 toml = "*"
 dataset = "*"
@@ -24,7 +23,6 @@ pymysql = "*"
 dotenv = "*"
 fastapi-cache2 = "*"
 aioredis = "*"
-venv = "*"
 
 [tool.poetry.dev-dependencies]
 #pytest = "^3.10.1"

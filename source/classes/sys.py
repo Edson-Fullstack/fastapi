@@ -1,5 +1,4 @@
 import asyncio
-from os.path import join, dirname
 from fastapi_cache.decorator import cache
 from fastapi_cache import JsonCoder
 from stuf import stuf
@@ -29,8 +28,9 @@ class SYS:
     def __init__(self):
         toml_file = Path('../source/pyproject.toml').read_text()
         self.data = toml.loads(toml_file)
-        self.env = self.data['tool']['poetry']['env']
+        self.env = os.getenv(f"ENV")
         self.debug = os.getenv(f"DEBUG[{self.env}]")
+        self.redis = os.getenv(f"REDIS_DOCKER[{self.env}]")
         self.log = os.getenv(f"DEBUG-LEVEL[{self.env}]")
         self.postgres = self.__connect(os.getenv(f"POSTGRES_URI[{self.env}]"))
         self.mysql = None

@@ -8,17 +8,15 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi_cache.coder import JsonEncoder, object_hook
 
 from routes import doc, api
-from classes.sys import SYS, conditional_cache
+from classes.sys import SYS
 from starlette.requests import Request
 from starlette.responses import Response
 
 from fastapi_cache import FastAPICache, JsonCoder
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
-from fastapi_cache.backends.inmemory import InMemoryBackend
 
 import os
 
@@ -37,7 +35,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    redis = await aioredis.create_redis_pool("redis://localhost:6379", password="pass", encoding="utf8")
+    redis = await aioredis.create_redis_pool(sys.redis, password="pass", encoding="utf8")
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
 
@@ -46,8 +44,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = sys.delimiters(Jinja2Templates(directory="templates"))
 
 doc.init_app(app, sys)
-api.init_app(app, sys, "/api")
-api.init_app(app, sys, "/safe")
+api.init_app(app, "/api")
+api.init_app(app, "/safe")
 
 
 @app.get("/", tags=["main"], response_class=HTMLResponse)
@@ -103,4 +101,4 @@ async def index_data2():
 
 if __name__ == "__main__":
     sys.logger(f"Environment = {sys.env}", sys.log)
-    uvicorn.run("main:app", host="127.0.0.1", port=8080, reload=os.getenv(f"DEBUG[{sys.env}]"), log_level="info")
+    uvicorn.run("main:app", host="localhost", port=8080, reload=os.getenv(f"DEBUG[{sys.env}]"), log_level="info")

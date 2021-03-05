@@ -1,6 +1,3 @@
-from fastapi.openapi.utils import get_openapi
-from sqlalchemy.sql import text
-from typing import Optional, List
 from fastapi import FastAPI, Request
 
 
@@ -8,9 +5,8 @@ def access(db, table, method):
     return True
 
 
-def init_app(app, sys, access_point="/api"):
+def init_app(app, access_point="/api"):
     # define postgres,mysql as attributes of the object
-    db = getattr(sys)
 
     @app.get(access_point, tags=[access_point])
     async def api():

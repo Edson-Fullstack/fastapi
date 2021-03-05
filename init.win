@@ -1,6 +1,7 @@
 install python
 install pip
 
+pip install venv
 #venv
 python -m venv venv
 #active on linux and macos
@@ -11,10 +12,14 @@ source env/bin/activate
 deactave
 
 #install poetry
-pip install poetry
+#pip install poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+python -m pip install --upgrade pip
+python -m poetry update
 pip install -r .\source\requirements.txt
 
 #docker
+docker build source/.
 docker-compose up
 docker-compose -f docker-redis.yml up --detach
 docker-compose -f docker-postgres.yml up --detach

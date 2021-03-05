@@ -1,7 +1,9 @@
 FROM python:3.7
-COPY requirements.txt ./app/requirements.txt
-RUN pip3 install uvicorn
-RUN pip3 install -r app/requirements.txt
-COPY ./ /app
-CMD ["python3", "app/main.py" ]
-#CMD ["uvicorn", "source.main:source","--reload", "--host", "localhost", "--port", "8080" ]
+WORKDIR /source
+COPY requirements.txt requirements.txt
+#this packages need be extracted to poetry
+RUN pip3 install uvicorn aioredis fastapi_cache2 python-dotenv
+RUN pip3 install -r requirements.txt
+COPY ./ /source
+#CMD ["python3", "main.py" ]
+CMD ["uvicorn", "main:app","--reload", "--host", "0.0.0.0", "--port", "8080" ]
