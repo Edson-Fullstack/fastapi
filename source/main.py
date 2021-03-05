@@ -36,8 +36,9 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    redis = await aioredis.create_redis_pool(sys.redis, password="pass", encoding="utf8")
-    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    if sys.exp == "False":
+        redis = await aioredis.create_redis_pool(sys.redis, password="pass", encoding="utf8")
+        FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
