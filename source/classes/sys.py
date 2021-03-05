@@ -30,7 +30,7 @@ class SYS:
         self.data = toml.loads(toml_file)
         self.env = os.getenv(f"ENV")
         self.exp = os.getenv(f"EXP")
-        self.port = os.getenv(f"PORT")
+        self.port =8888 if os.getenv(f"PORT").__eq__(None) else os.getenv(f"PORT")
         self.debug = os.getenv(f"DEBUG[{self.env}]")
         self.redis = os.getenv(f"REDIS_DOCKER[{self.env}]")
         self.log = os.getenv(f"DEBUG-LEVEL[{self.env}]")
