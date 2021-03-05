@@ -6,4 +6,4 @@ RUN pip3 install uvicorn aioredis fastapi_cache2 python-dotenv nest_asyncio pyng
 RUN pip3 install -r requirements.txt
 COPY ./ /source
 #CMD ["python3", "main.py" ]
-CMD ["uvicorn", "main:app","--reload", "--host", "0.0.0.0", "--port", "8080" ]
+CMD ["uvicorn", "main:app","--reload", "--host", "0.0.0.0", "--port", "8888" ]

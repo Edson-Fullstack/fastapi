@@ -111,13 +111,13 @@ async def index_data2():
 if __name__ == "__main__":
     sys.logger(f"Environment = {sys.env}", sys.log)
     if sys.exp == "False":
-        uvicorn.run("main:app", host="localhost", port=8080, reload=os.getenv(f"DEBUG[{sys.env}]"), log_level="info")
+        uvicorn.run("main:app", host="localhost", port=int(sys.port), reload=os.getenv(f"DEBUG[{sys.env}]"), log_level="info")
     else:
         import nest_asyncio
         from pyngrok import ngrok
         import uvicorn
 
-        ngrok_tunnel = ngrok.connect(8080)
+        ngrok_tunnel = ngrok.connect(int(sys.port))
         print('Public URL:', ngrok_tunnel.public_url)
         nest_asyncio.apply()
-        uvicorn.run(app, port=8080)
+        uvicorn.run(app, port=int(sys.port))
