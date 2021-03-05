@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from routes import doc, api
+from routes import doc, rest
 from classes.sys import SYS
 from starlette.requests import Request
 from starlette.responses import Response
@@ -17,6 +17,7 @@ from starlette.responses import Response
 from fastapi_cache import FastAPICache, JsonCoder
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
+from fastapi.middleware.cors import CORSMiddleware
 
 import os
 
@@ -44,9 +45,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = sys.delimiters(Jinja2Templates(directory="templates"))
 
 doc.init_app(app, sys)
-api.init_app(app, "/api")
-api.init_app(app, "/safe")
+rest.init_app(app, "/api")
+rest.init_app(app, "/safe")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 @app.get("/", tags=["main"], response_class=HTMLResponse)
 async def index(request: Request):
@@ -73,7 +81,7 @@ def generate_key(
 
 @app.get("/index-data", tags=["main"], response_class=HTMLResponse)
 #@conditional_cache(int(os.getenv(f"CACHE[{sys.env}]")) != 0, cache(expire=int(os.getenv(f"CACHE[{sys.env}]")), coder=JsonCoder))
-@cache(expire=10, coder=JsonCoder, key_builder=generate_key)
+#@cache(expire=10, coder=JsonCoder, key_builder=generate_key)
 async def index_data():
     # await sys.await_time(5)
     data = {
@@ -86,7 +94,7 @@ async def index_data():
 
 @app.get("/index-data2", tags=["main"], response_class=HTMLResponse)
 # @cond_decorator(int(os.getenv(f"CACHE[{sys.env}]")) != 0, cache(expire=int(os.getenv(f"CACHE[{sys.env}]")), coder=JsonCoder))
-@cache(expire=10, coder=JsonCoder, key_builder=generate_key)
+#@cache(expire=10, coder=JsonCoder, key_builder=generate_key)
 async def index_data2():
     # await sys.await_time(5)
     data = {
@@ -101,4 +109,14 @@ async def index_data2():
 
 if __name__ == "__main__":
     sys.logger(f"Environment = {sys.env}", sys.log)
-    uvicorn.run("main:app", host="localhost", port=8080, reload=os.getenv(f"DEBUG[{sys.env}]"), log_level="info")
+    if sys.exp == "False":
+        uvicorn.run("main:app", host="localhost", port=8080, reload=os.getenv(f"DEBUG[{sys.env}]"), log_level="info")
+    else:
+        import nest_asyncio
+        from pyngrok import ngrok
+        import uvicorn
+
+        ngrok_tunnel = ngrok.connect(8080)
+        print('Public URL:', ngrok_tunnel.public_url)
+        nest_asyncio.apply()
+        uvicorn.run(app, port=8080)

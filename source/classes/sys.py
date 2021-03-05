@@ -29,6 +29,7 @@ class SYS:
         toml_file = Path('../source/pyproject.toml').read_text()
         self.data = toml.loads(toml_file)
         self.env = os.getenv(f"ENV")
+        self.exp = os.getenv(f"EXP")
         self.debug = os.getenv(f"DEBUG[{self.env}]")
         self.redis = os.getenv(f"REDIS_DOCKER[{self.env}]")
         self.log = os.getenv(f"DEBUG-LEVEL[{self.env}]")

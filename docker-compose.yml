@@ -1,9 +1,9 @@
 version: '3.5'
 services: 
-    server:
+    api:
         hostname: api
-        build: source
         container_name: "api"
+        build: source
         volumes:
             - type: bind
               source: ./source
